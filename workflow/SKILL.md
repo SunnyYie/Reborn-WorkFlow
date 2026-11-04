@@ -5,6 +5,8 @@ description: 在 Codex 对话中按主题结合 RAG 与 PCO 定三首歌，定�
 
 # 三首敬拜歌单 Workflow
 
+本文件是完整流程。用户已指定三首且仅需从 PCO 取中文歌词/简谱直接组装时，改读 [mini-workflow/SKILL.md](../mini-workflow/SKILL.md)，使用独立 mini 会话；不要套用下文的 RAG 优先、定调试听、话语及整份确认门禁。完整流程本身不变。
+
 先阅读 [运行与 JSON 接口](README.md)。引擎不调用独立模型；主题理解、推荐和自然语言问答由当前 Codex 完成。不要把引擎说成能独立理解主题的自动选歌算法。
 
 ## 先查已有编排

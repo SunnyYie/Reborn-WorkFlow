@@ -1,5 +1,7 @@
 # 敬拜定歌与祷告话语 Workflow
 
+已指定三首、无需推荐/定调/MP3/话语时，使用独立的 [mini-workflow](../mini-workflow/README.md)。它只从 PCO 取资料，调/BPM 留空，未指定回应和结束也留空；不与本流程共用 state。
+
 这是 **Codex 对话入口 + 可运行状态/PCO/RAG/下载/歌单引擎**，不是独立聊天机器人。先收集主题与偏好，查询 RAG 及真实 PCO，确定三首和顺序；再定调、试听、交付资源；然后拟定祷告话语，最后补经文、确认回应/结束并组装完整 Word。自然语言推荐和话语由 Codex 完成，不内置独立模型。Word 导出需要 `python-docx`，默认优先使用本机 bundled Python；MP3 校验用现有 `ffprobe`，不移调、不转码。
 
 ## RAG 与混合资料

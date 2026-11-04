@@ -5,6 +5,7 @@ Only source code, skills, generic examples and development documentation belong 
 Keep these local and backed up privately:
 
 - `workflow/runs/`: user requirements, confirmations, personal spoken scripts, state, audio, lyrics and exports.
+- `mini-workflow/runs/`: private mini sessions, downloaded originals, reading evidence, exports and previews.
 - `rag/data/` and `rag/catalog.json`: private song databases, source snapshots and the real source catalog.
 - `memory/`: local project notes.
 - `skills/pco-assemble-worship-setlist/assets/reference.docx`: the user-provided populated template.
@@ -14,7 +15,7 @@ Ignoring these paths does not delete their local contents. `git rm --cached` sto
 
 ## Local Setup
 
-For a new checkout, restore your own authorized materials from a private backup. Provide the local template at the path above before document generation. Copy `rag/catalog.example.json` to the ignored `rag/catalog.json` and fill it with your own reviewed source ranges and hashes, then follow `rag/README.md` to ingest those sources. An empty catalog is a schema example, not a populated library. Existing local materials must not be overwritten.
+For a new checkout, restore your own authorized materials from a private backup. Provide the local template at the path above before document generation. Mini-workflow needs PCO access and this template, but no RAG library. For the full/local-RAG workflows, copy `rag/catalog.example.json` to the ignored `rag/catalog.json` and fill it with your own reviewed source ranges and hashes, then follow `rag/README.md` to ingest those sources. An empty catalog is a schema example, not a populated library. Existing local materials must not be overwritten.
 
 PCO credentials come from the local Keychain or `PCO_CLIENT_ID` / `PCO_SECRET` environment variables. Never put their values in source files, inputs, reports or Git configuration.
 

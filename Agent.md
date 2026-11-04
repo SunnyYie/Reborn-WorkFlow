@@ -1,6 +1,6 @@
 # Reborn-WorkFlow Agent 执行指南
 
-更新日期：2026-11-03。项目根目录：`/Users/sunyi/ai/Agent/Reborn-WorkFlow`。
+更新日期：2026-11-04。项目根目录：`/Users/sunyi/ai/Agent/Reborn-WorkFlow`。
 
 面向接手本项目的 Agent：先读本文件，再按当前阶段读取对应 Skill，用已有 CLI 推进同一会话。不要重写引擎、重建模板或修改正常流程来完成普通歌单任务。
 
@@ -10,7 +10,9 @@
 
 这是 **Agent 对话编排 + 本地状态机 + PCO/RAG/文件处理引擎**，不是独立聊天机器人。Agent 负责理解主题、阅读歌词、推荐方案、判断音乐适配及撰写话语；代码负责真实资源查询、状态与确认校验、原件交付、材料溯源、模板导出和安全清理。
 
-标准流程：
+有两条独立入口：需要推荐、定调试听、MP3 与话语时使用完整 workflow；用户已指定三首、只需组装时使用 [mini-workflow/SKILL.md](mini-workflow/SKILL.md)。mini 不是完整流程的跳门禁模式，不共用会话。
+
+完整流程：
 
 ```text
 主题、三首快慢与偏好
@@ -41,6 +43,7 @@
 | 当前任务 | 必读入口 |
 | --- | --- |
 | 启动或续接完整流程 | [workflow/SKILL.md](workflow/SKILL.md) |
+| 已选三首，直接从 PCO 取资料组装 | [mini-workflow/SKILL.md](mini-workflow/SKILL.md)、[接口](mini-workflow/README.md) |
 | 命令参数、JSON 字段与示例 | [workflow/README.md](workflow/README.md) |
 | 当前规则与历史变更 | [workflow/quality-optimization.md](workflow/quality-optimization.md)；本机可另读未发布的memory |
 | 历史歌名、版本、结束结构与本地快速组装 | [rag/SKILL.md](rag/SKILL.md)、[rag/README.md](rag/README.md) |
@@ -236,7 +239,20 @@ wf setlist-export --output /本次交付目录/歌单.docx
 
 此步骤为强制验收，不可跳过。按[样式与分页规则](skills/pco-assemble-worship-setlist/references/layout-acceptance.md)逐首核对字体、字号、颜色、段落/歌词间距与表格样式/宽高，特别检查标题/经文/表格外框/左栏歌词共用左边界、表格到歌词留白、主歌表格宽度协调，以及Verse之间、Chorus/Bridge等相邻乐段的12pt留白。前三首各自起页，任何一页只放一首主歌；歌词优先整首同页，跨页记录原因及已尝试调整；回应和结束合放独立页，不与第三首混排，口述附录另起。新导出必须经v5完整验收才能完成交付或成为清理替代稿；锁屏或无法查看原生分页时保持待验收。
 
-## 7. 独立本地 RAG 快速组装
+## 7. 精简组装与独立本地 RAG
+
+### 7.1 Mini-workflow：已选三首、PCO-only
+
+用户指定有序三首后直接查 PCO 并下载中文歌词，确无中文歌词时回退原始简谱；不先查 RAG，不读取本地历史歌词，不下载 MP3，不要求主题、歌手、定调试听、话语或整份歌单确认。歌曲/版本有歧义才询问，用户已提供的不用重问。新会话用 `mini-workflow/run new`，续接用 mini 自己的 `--state`，接口见其 README。
+
+- 调和 BPM 一律留空；经文、祷告及话语不自动生成，用户给了才加入，经文核验状态需如实记录。
+- 回应和结束位置保留，未指定歌曲就留空，不追问或代选；指定后同样只查 PCO。
+- 缺歌词/简谱或查询失败均可继续出稿，但分别披露缺失、权限、网络和待选版本；保留相应标题/空内容，不补词，不把错误说成没有。
+- 组装时允许核验原始谱面并识读歌词，明确乐段/小节才填；未明确顺序可给编排建议，不能称为现场已确认。
+- 沿用保留模板、真实双栏、配色和分页；输出 DOCX/sources 后做原生 WPS/Word 检查及安全收尾。空歌词在 mini 验收里用实际 N/A 原因，不虚构歌词页。
+- 本节及 mini Skill 对 mini 优先于本文其他章节的 RAG 优先、定调、话语、必填回应/结束及人工整份确认要求；完整流程规则不变。
+
+### 7.2 独立本地 RAG 快速组装
 
 仅当用户只需要本地资料拼接、不需要完整 PCO 定调/MP3/话语流程时使用。不能伪造完整 workflow 状态或确认：
 
@@ -288,6 +304,7 @@ wf setlist-export --output /本次交付目录/歌单.docx
 PY="$HOME/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3"
 "$PY" -B -m unittest discover -s workflow -p 'test_*.py' -q
 "$PY" -B -m unittest discover -s rag -p 'test_*.py' -q
+"$PY" -B -m unittest discover -s mini-workflow -p 'test_*.py' -q
 ```
 
 历史验收曾覆盖真实PCO主流程、同歌F调回应分支及WPS样稿；不代表每次修改都重跑了外部服务或原生UI。本次质量优化的变更、完整回归结果及未验收边界见[workflow/quality-optimization.md](workflow/quality-optimization.md)。测试不是任意主题的独立AI质量评测，新回应歌曲、谱面分析导入及新质量门禁的自动化使用隔离夹具，不冒充真人确认。

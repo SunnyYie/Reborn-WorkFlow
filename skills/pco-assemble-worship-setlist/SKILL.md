@@ -5,6 +5,8 @@ description: 根据中文歌词、简谱及对应音频识别敬拜歌曲乐段�
 
 # 组装敬拜歌单
 
+**Mini 入口例外**：用户启动 [mini-workflow](../../mini-workflow/SKILL.md) 时，以其规则为准：只查 PCO，不查 RAG、不定调、不下载音频、不强制话语/整份确认；调与BPM始终空白，未提供经文、回应及结束歌曲也留空。仍沿用本模板和真实原生版式检查；mini 空槽位验收使用明确 N/A 观察。下文完整流程及独立 RAG 组装的必填与确认规则不因此改变。
+
 先读 [模板规则与证据](references/template-rules.md)，以用户本次要求优先。参考模板位于 `assets/reference.docx`。它是格式样本，不是固定曲目、调、BPM、演唱分工或圣经内容。需要从简谱/音频补结构时读 [结构识别与确认](references/structure-analysis.md)。
 
 每次组装后必须执行[强制样式与分页验收](references/layout-acceptance.md)：前三首分页隔离、歌词优先整首一页、回应与结束合放独立页；逐首检查字体、字号、颜色、间距、表格样式及尺寸。代码结构检查与原生WPS/Word逐页观察缺一不可，未通过不能报告完成或清理唯一已验收稿。

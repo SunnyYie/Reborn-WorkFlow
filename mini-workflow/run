@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+ROOT=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
+if [ -n "${MINI_WORKFLOW_PYTHON:-}" ]; then
+    exec "$MINI_WORKFLOW_PYTHON" "$ROOT/mini.py" "$@"
+fi
+for interpreter in "$HOME/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3" python3 /usr/bin/python3; do
+    if "$interpreter" -c 'import sys, xml.etree.ElementTree as E; import lxml.etree; assert sys.version_info >= (3, 9); E.fromstring("<ok/>")' >/dev/null 2>&1; then
+        exec "$interpreter" "$ROOT/mini.py" "$@"
+    fi
+done
+printf '%s\n' 'Python >= 3.9 with working XML and lxml is required.' >&2
+exit 2

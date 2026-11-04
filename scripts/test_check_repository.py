@@ -10,7 +10,8 @@ import check_repository as policy
 class RepositoryPolicyTests(unittest.TestCase):
     def test_rejects_private_materials_and_nested_caches(self):
         for path in (
-            "workflow/runs/session/state.json", "rag/data/songs.sqlite3", "rag/catalog.json",
+            "workflow/runs/session/state.json", "mini-workflow/runs/session/state.json",
+            "mini-workflow/runs/session/downloads/lyrics.txt", "rag/data/songs.sqlite3", "rag/catalog.json",
             "memory/notes.md", "demo/example.txt", "rag/__pycache__/rag.cpython-312.pyc",
             "a/.DS_Store", "a/._file", ".env", ".env.production", "a/.env.local",
             ".aws/credentials", ".codex/config.toml", ".agents/state.json",
@@ -25,7 +26,8 @@ class RepositoryPolicyTests(unittest.TestCase):
         for path in (
             ".env.example", ".github/workflows/repository-hygiene.yml",
             "workflow/pco_api.py", "rag/catalog.example.json",
-            "workflow/quality-optimization.md", "Agent.md", "SECURITY.md",
+            "workflow/quality-optimization.md", "mini-workflow/mini.py",
+            "mini-workflow/SKILL.md", "Agent.md", "SECURITY.md",
         ):
             with self.subTest(path=path):
                 self.assertIsNone(policy.reason(path))

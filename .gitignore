@@ -30,6 +30,7 @@ client_secret*.json
 # Private session state, personal notes and locally licensed materials.
 # Keep these on disk; never publish them with the source repository.
 /workflow/runs/
+/mini-workflow/runs/
 /rag/data/
 /rag/catalog.json
 /memory/

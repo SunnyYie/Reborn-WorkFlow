@@ -5,7 +5,7 @@ import json
 from pathlib import PurePosixPath
 import subprocess
 
-PRIVATE_ROOTS = ("workflow/runs/", "rag/data/", "memory/", "demo/")
+PRIVATE_ROOTS = ("workflow/runs/", "mini-workflow/runs/", "rag/data/", "memory/", "demo/")
 PRIVATE_SUFFIXES = {
     ".pyc", ".pyo", ".pem", ".key", ".p12", ".pfx", ".sqlite", ".sqlite3", ".db",
     ".mp3", ".wav", ".m4a", ".flac", ".mp4", ".mov", ".docx", ".pdf",
