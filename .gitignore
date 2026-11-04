@@ -1,0 +1,53 @@
+# OS/editor/runtime caches
+.DS_Store
+._*
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+*.log
+*.tmp
+
+# Credentials and local agent configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+client_secret*.json
+.aws/
+.codex/
+.agents/
+
+# Private session state, personal notes and locally licensed materials.
+# Keep these on disk; never publish them with the source repository.
+/workflow/runs/
+/rag/data/
+/rag/catalog.json
+/memory/
+*.sqlite
+*.sqlite3
+*.db
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm
+*.db-wal
+*.db-shm
+*.mp3
+*.wav
+*.m4a
+*.flac
+*.mp4
+*.mov
+*.docx
+*.pdf
+/demo
