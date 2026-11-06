@@ -32,6 +32,13 @@ PCO 下载完成后，缺失 RAG 的原始中文 TXT/DOCX 可通过 `material-pr
 
 ## 开始使用
 
+跨平台或其他 Agent 接入先读根目录 [README](../README.md) 和 [AGENTS.md](../AGENTS.md)。
+新增 `python reborn.py run workflow ...` 作为 Windows/macOS/Linux 统一入口；
+原 `./run` 命令和 `status` 返回字段保持兼容。`next` 是新增只读阶段指引，
+提示 Agent 自行推进或请求本次真实业务确认，不自动授权、不代替试听或视觉检查。
+新版在线环境检查为 `python reborn.py doctor --online`，直接验证实际 PCO API，
+不需要安装原 `pco` CLI；下文原 `./run doctor` 保留原检查行为。
+
 在 Codex 中说：
 
 > 先读取 `/Users/sunyi/ai/Agent/Reborn-WorkFlow/workflow/SKILL.md`，启动三首歌选歌流程。

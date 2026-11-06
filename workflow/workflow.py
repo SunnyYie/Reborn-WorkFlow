@@ -2,7 +2,6 @@
 """JSON command interface used by the Codex conversation workflow."""
 
 import argparse
-import fcntl
 import json
 import os
 import subprocess
@@ -19,6 +18,8 @@ import setlist
 import artifacts
 import supplement
 import status
+import guidance
+from file_lock import exclusive
 from pco_api import PCO, WorkflowError
 
 ROOT = Path(__file__).resolve().parent
@@ -54,8 +55,7 @@ def persist(path, state):
 @contextmanager
 def locked(path):
     engine.require(path.is_file(), "Session state does not exist.")
-    with path.with_suffix(".lock").open("a") as handle:
-        fcntl.flock(handle, fcntl.LOCK_EX)
+    with path.with_suffix(".lock").open("a+") as handle, exclusive(handle):
         state = json.loads(path.read_text(encoding="utf-8"))
         engine.require(state.get("schema_version") == 1, "Unsupported state version.")
         yield state
@@ -71,6 +71,7 @@ def main():
     new.add_argument("--test-run", action="store_true", help="Isolated automation; exports are not live approvals")
     commands.add_parser("show")
     commands.add_parser("status")
+    commands.add_parser("next")
     commands.add_parser("spoken-context")
     commands.add_parser("doctor")
     catalog = commands.add_parser("catalog")
@@ -136,6 +137,9 @@ def main():
             return
         if command == "status":
             emit(status.summary(state))
+            return
+        if command == "next":
+            emit(guidance.next_step(state))
             return
         if command == "spoken-context":
             emit(setlist.spoken_context(state))

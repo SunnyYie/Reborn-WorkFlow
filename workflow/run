@@ -6,7 +6,10 @@ if [ -n "${WORKFLOW_PYTHON:-}" ]; then
     "$WORKFLOW_PYTHON" -c 'import sys, xml.etree.ElementTree as E; assert sys.version_info >= (3, 9); E.fromstring("<ok/>")' >/dev/null
     exec "$WORKFLOW_PYTHON" "$ROOT/workflow.py" "$@"
 fi
-for interpreter in "$HOME/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3" python3 /usr/bin/python3; do
+for interpreter in "$ROOT/../.venv/bin/python" "$HOME/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3" python3 /usr/bin/python3; do
+    if [ "$interpreter" = "$ROOT/../.venv/bin/python" ] && ! "$interpreter" -c 'import docx, lxml.etree, pypdf' >/dev/null 2>&1; then
+        continue
+    fi
     if "$interpreter" -c 'import sys, xml.etree.ElementTree as E; assert sys.version_info >= (3, 9); E.fromstring("<ok/>")' >/dev/null 2>&1; then
         exec "$interpreter" "$ROOT/workflow.py" "$@"
     fi

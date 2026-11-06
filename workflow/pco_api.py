@@ -10,6 +10,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+import credential_store
 
 ORIGIN = "https://api.planningcenteronline.com"
 MAX_FILE_BYTES = 30 * 1024 * 1024
@@ -62,6 +63,12 @@ def credentials():
     if any(values) and not all(values):
         raise WorkflowError("auth_error", "Both PCO environment credentials must be set.")
     if not all(values):
+        stored = credential_store.load()
+        if any(stored):
+            if not all(stored):
+                raise WorkflowError("auth_error", "Incomplete OS credentials; configure PCO locally.")
+            values = stored
+    if not all(values):
         values = []
         for account in ("client_id", "client_secret"):
             try:
@@ -71,7 +78,7 @@ def credentials():
                 )
             except (OSError, subprocess.SubprocessError):
                 raise WorkflowError(
-                    "auth_error", "Keychain unavailable; run pco init locally or approve Keychain access."
+                    "auth_error", "OS store/legacy Keychain unavailable; approve access or configure locally with reborn.py auth."
                 ) from None
             values.append(result.stdout.strip())
     if not all(values):

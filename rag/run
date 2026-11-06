@@ -1,7 +1,11 @@
 #!/bin/sh
 set -eu
 DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
-PY="${RAG_PYTHON:-$HOME/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3}"
+DEFAULT="$HOME/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3"
+if [ -x "$DIR/../.venv/bin/python" ] && "$DIR/../.venv/bin/python" -c 'import docx, lxml.etree, pypdf' >/dev/null 2>&1; then
+    DEFAULT="$DIR/../.venv/bin/python"
+fi
+PY="${RAG_PYTHON:-$DEFAULT}"
 if [ ! -x "$PY" ]; then
     PY=/usr/bin/python3
 fi

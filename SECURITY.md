@@ -19,6 +19,20 @@ For a new checkout, restore your own authorized materials from a private backup.
 
 PCO credentials come from the local Keychain or `PCO_CLIENT_ID` / `PCO_SECRET` environment variables. Never put their values in source files, inputs, reports or Git configuration.
 
+The portable adapter additionally supports the OS-protected `reborn-workflow`
+credential service (macOS Keychain, Windows Credential Manager, Linux Secret
+Service). `reborn.py auth` accepts credentials only in a local interactive
+terminal. It does not expose an MCP credential-write tool or plaintext fallback.
+Environment credentials retain priority; legacy `pco-cli` Keychain access remains
+available when no new OS-store pair exists.
+
+The optional MCP server is local stdio only. Connect only trusted hosts: a connected
+Agent can query private PCO lyrics and read managed-session media. It exposes
+allowlisted engine actions, not arbitrary shell commands or arbitrary local files.
+It does not install dependencies, authorize itself, authenticate users over a
+network, or provide a public/mobile service. Do not publish it through a tunnel
+without designing a separate authenticated, per-user-isolated deployment.
+
 ## Before Publishing
 
 ```sh

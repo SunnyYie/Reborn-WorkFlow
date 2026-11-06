@@ -3,7 +3,6 @@
 
 import argparse
 import copy
-import fcntl
 import hashlib
 import json
 import os
@@ -22,6 +21,7 @@ import downloads
 import engine as e
 from pco_api import PCO, WorkflowError, identifier
 import delivery
+from file_lock import exclusive
 
 
 def sha(path):
@@ -400,8 +400,7 @@ def main():
     e.require(args.state and args.state.is_file() and not args.state.is_symlink(),
               "Supply an existing mini --state before the subcommand.")
     path = args.state.resolve()
-    with path.with_suffix(".lock").open("a") as lock:
-        fcntl.flock(lock, fcntl.LOCK_EX)
+    with path.with_suffix(".lock").open("a+") as lock, exclusive(lock):
         state = json.loads(path.read_text(encoding="utf-8"))
         e.require(state.get("mode") == "mini" and state.get("schema_version") == 1,
                   "Not a supported mini-workflow state; never use a full workflow session here.")
